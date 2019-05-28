@@ -63,3 +63,20 @@ For the likes (anonymous) we will have a counter beside the like button to displ
 *Note that we don't have connected user so this test is more to see how you implement the logic*
 
 Good luck :)
+
+### 4 - Filter the posts
+
+Add a filtering component which can sort posts by relevance.
+
+The filter allows the user to enter
+ - simple text
+ - a location (point) and a radius
+
+Determine how to score the results by proximity and text matching.
+
+The posts are returned in order of relevance, according to the score of each result.
+
+Use mongoose for the aggregation.
+
+
+_Notes: For evaluation, we will mainly focus on the code structure and readability, the separation of responsibilities in the methods/components, and the visual consistency._
