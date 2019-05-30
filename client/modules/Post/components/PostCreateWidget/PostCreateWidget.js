@@ -10,6 +10,7 @@ export class PostCreateWidget extends Component {
     const nameRef = this.refs.name;
     const titleRef = this.refs.title;
     const contentRef = this.refs.content;
+
     if (nameRef.value && titleRef.value && contentRef.value) {
       this.props.addPost(nameRef.value, titleRef.value, contentRef.value);
       nameRef.value = titleRef.value = contentRef.value = '';
@@ -18,6 +19,15 @@ export class PostCreateWidget extends Component {
 
   render() {
     const cls = `${styles.form} ${(this.props.showAddPost ? styles.appear : '')}`;
+
+    const onTypeAddress = (event) => {
+      const address = event.target.value;
+
+      if (address.length > 3) {
+        this.props.getAddresses(address);
+      }
+    };
+
     return (
       <div className={cls}>
         <div className={styles['form-content']}>
@@ -25,6 +35,12 @@ export class PostCreateWidget extends Component {
           <input placeholder={this.props.intl.messages.authorName} className={styles['form-field']} ref="name" />
           <input placeholder={this.props.intl.messages.postTitle} className={styles['form-field']} ref="title" />
           <textarea placeholder={this.props.intl.messages.postContent} className={styles['form-field']} ref="content" />
+          <input
+            onChange={onTypeAddress}
+            placeholder="Location"
+            className={styles['form-field']}
+            ref="location"
+          />
           <a className={styles['post-submit-button']} href="#" onClick={this.addPost}><FormattedMessage id="submit" /></a>
         </div>
       </div>
@@ -34,8 +50,16 @@ export class PostCreateWidget extends Component {
 
 PostCreateWidget.propTypes = {
   addPost: PropTypes.func.isRequired,
-  showAddPost: PropTypes.bool.isRequired,
+  addresses: PropTypes.arrayOf(PropTypes.shape({
+    address: PropTypes.string,
+    location: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }),
+  })),
+  getAddresses: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
+  showAddPost: PropTypes.bool.isRequired,
 };
 
 export default injectIntl(PostCreateWidget);

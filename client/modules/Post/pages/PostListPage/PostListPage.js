@@ -8,16 +8,22 @@ import PostCreateWidget from '../../components/PostCreateWidget/PostCreateWidget
 
 // Import Actions
 import { addPostRequest, fetchPosts, deletePostRequest } from '../../PostActions';
+import { getAddressesRequest } from '../../AddressActions';
 import { toggleAddPost } from '../../../App/AppActions';
 
 // Import Selectors
 import { getShowAddPost } from '../../../App/AppReducer';
 import { getPosts } from '../../PostReducer';
+import { getAddresses } from '../../AddressReducer';
 
 class PostListPage extends Component {
   componentDidMount() {
     this.props.dispatch(fetchPosts());
   }
+
+  getAddresses = (address) => {
+    this.props.dispatch(getAddressesRequest(address));
+  };
 
   handleDeletePost = post => {
     if (confirm('Do you want to delete this post')) { // eslint-disable-line
@@ -33,7 +39,12 @@ class PostListPage extends Component {
   render() {
     return (
       <div>
-        <PostCreateWidget addPost={this.handleAddPost} showAddPost={this.props.showAddPost} />
+        <PostCreateWidget
+          addPost={this.handleAddPost}
+          addresses={this.props.addresses}
+          getAddresses={this.getAddresses}
+          showAddPost={this.props.showAddPost}
+        />
         <PostList handleDeletePost={this.handleDeletePost} posts={this.props.posts} />
       </div>
     );
@@ -48,17 +59,25 @@ function mapStateToProps(state) {
   return {
     showAddPost: getShowAddPost(state),
     posts: getPosts(state),
+    addresses: getAddresses(state),
   };
 }
 
 PostListPage.propTypes = {
+  addresses: PropTypes.arrayOf(PropTypes.shape({
+    address: PropTypes.string,
+    location: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }),
+  })),
+  dispatch: PropTypes.func.isRequired,
   posts: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
   })).isRequired,
   showAddPost: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired,
 };
 
 PostListPage.contextTypes = {
