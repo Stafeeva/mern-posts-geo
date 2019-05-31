@@ -12,7 +12,7 @@ export function getAddresses(req, res) {
   }, (err, response) => {
     if (!err) {
       const addresses = response.json.results.map(a => ({
-        address: a.formatted_address,
+        formattedAddress: a.formatted_address,
         location: a.geometry.location,
       }));
 

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 
+import AddressSearchField from './AddressSearchField';
+
 // Import Style
 import styles from './PostCreateWidget.css';
 
@@ -10,23 +12,18 @@ export class PostCreateWidget extends Component {
     const nameRef = this.refs.name;
     const titleRef = this.refs.title;
     const contentRef = this.refs.content;
+    const locationRef = this.refs.location;
 
-    if (nameRef.value && titleRef.value && contentRef.value) {
-      this.props.addPost(nameRef.value, titleRef.value, contentRef.value);
-      nameRef.value = titleRef.value = contentRef.value = '';
+    console.log('locationRef.value', locationRef.value);
+
+    if (nameRef.value && titleRef.value && contentRef.value && nameRef.location) {
+      this.props.addPost(nameRef.value, titleRef.value, contentRef.value, locationRef.value);
+      nameRef.value = titleRef.value = contentRef.value = locationRef.value = '';
     }
   };
 
   render() {
     const cls = `${styles.form} ${(this.props.showAddPost ? styles.appear : '')}`;
-
-    const onTypeAddress = (event) => {
-      const address = event.target.value;
-
-      if (address.length > 3) {
-        this.props.getAddresses(address);
-      }
-    };
 
     return (
       <div className={cls}>
@@ -35,11 +32,9 @@ export class PostCreateWidget extends Component {
           <input placeholder={this.props.intl.messages.authorName} className={styles['form-field']} ref="name" />
           <input placeholder={this.props.intl.messages.postTitle} className={styles['form-field']} ref="title" />
           <textarea placeholder={this.props.intl.messages.postContent} className={styles['form-field']} ref="content" />
-          <input
-            onChange={onTypeAddress}
-            placeholder="Location"
-            className={styles['form-field']}
-            ref="location"
+          <AddressSearchField
+            addresses={this.props.addresses}
+            getAddresses={this.props.getAddresses}
           />
           <a className={styles['post-submit-button']} href="#" onClick={this.addPost}><FormattedMessage id="submit" /></a>
         </div>
