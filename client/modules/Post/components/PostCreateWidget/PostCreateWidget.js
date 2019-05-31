@@ -12,9 +12,10 @@ export class PostCreateWidget extends Component {
     const nameRef = this.refs.name;
     const titleRef = this.refs.title;
     const contentRef = this.refs.content;
-    const locationRef = this.refs.location;
 
-    console.log('locationRef.value', locationRef.value);
+    console.log('this.refs', this.refs);
+
+    const locationRef = this.refs.location;
 
     if (nameRef.value && titleRef.value && contentRef.value && nameRef.location) {
       this.props.addPost(nameRef.value, titleRef.value, contentRef.value, locationRef.value);
@@ -32,10 +33,7 @@ export class PostCreateWidget extends Component {
           <input placeholder={this.props.intl.messages.authorName} className={styles['form-field']} ref="name" />
           <input placeholder={this.props.intl.messages.postTitle} className={styles['form-field']} ref="title" />
           <textarea placeholder={this.props.intl.messages.postContent} className={styles['form-field']} ref="content" />
-          <AddressSearchField
-            addresses={this.props.addresses}
-            getAddresses={this.props.getAddresses}
-          />
+          <AddressSearchField />
           <a className={styles['post-submit-button']} href="#" onClick={this.addPost}><FormattedMessage id="submit" /></a>
         </div>
       </div>
@@ -45,14 +43,6 @@ export class PostCreateWidget extends Component {
 
 PostCreateWidget.propTypes = {
   addPost: PropTypes.func.isRequired,
-  addresses: PropTypes.arrayOf(PropTypes.shape({
-    address: PropTypes.string,
-    location: PropTypes.shape({
-      lat: PropTypes.number,
-      lng: PropTypes.number,
-    }),
-  })),
-  getAddresses: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   showAddPost: PropTypes.bool.isRequired,
 };

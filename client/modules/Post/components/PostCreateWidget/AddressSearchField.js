@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import { getAddressesRequest } from '../../AddressActions';
+
+import { getAddresses } from '../../AddressReducer';
 
 import styles from './PostCreateWidget.css';
 
@@ -17,7 +22,7 @@ class AddressSearchField extends Component {
     const address = event.target.value;
 
     if (address.length > 2) {
-      this.props.getAddresses(address);
+      this.getAddresses(address);
 
       this.state.showOptions = true;
     }
@@ -38,6 +43,10 @@ class AddressSearchField extends Component {
       showOptions: false,
     });
   }
+
+  getAddresses = (address) => {
+    this.props.dispatch(getAddressesRequest(address));
+  };
 
   render() {
     const { onClickRemoveLocation, onSelectAddress, onTypeAddress } = this;
@@ -91,6 +100,12 @@ class AddressSearchField extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    addresses: getAddresses(state),
+  };
+}
+
 AddressSearchField.propTypes = {
   addresses: PropTypes.arrayOf(PropTypes.shape({
     address: PropTypes.string,
@@ -99,7 +114,7 @@ AddressSearchField.propTypes = {
       lng: PropTypes.number,
     }),
   })),
-  getAddresses: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default AddressSearchField;
+export default connect(mapStateToProps)(AddressSearchField);

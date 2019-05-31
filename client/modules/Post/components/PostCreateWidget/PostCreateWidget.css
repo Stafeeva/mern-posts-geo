@@ -50,6 +50,7 @@
   border: 1px solid #ddd;
   outline: none;
   color: #212121;
+  margin-bottom: 5px;
 }
 
 .option-field:hover {
@@ -65,6 +66,8 @@
   top: 30%;
   right: 10px;
   border: none;
+  opacity: 0.6;
+  cursor: pointer;
 }
 
 textarea {
