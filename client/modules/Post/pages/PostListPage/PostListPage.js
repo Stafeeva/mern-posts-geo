@@ -29,9 +29,9 @@ class PostListPage extends Component {
   handleAddPost = (name, title, content) => {
     this.props.dispatch(toggleAddPost());
 
-    const { location } = this.props;
+    const { address } = this.props;
 
-    this.props.dispatch(addPostRequest({ name, title, content, location }));
+    this.props.dispatch(addPostRequest({ name, title, content, address }));
   };
 
   render() {
@@ -53,7 +53,7 @@ PostListPage.need = [() => { return fetchPosts(); }];
 // Retrieve data from store as props
 function mapStateToProps(state) {
   return {
-    location: getSelectedAddress(state),
+    address: getSelectedAddress(state),
     posts: getPosts(state),
     showAddPost: getShowAddPost(state),
   };
@@ -61,7 +61,7 @@ function mapStateToProps(state) {
 
 PostListPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  location: PropTypes.shape({
+  address: PropTypes.shape({
     formattedAddress: PropTypes.string,
     location: PropTypes.shape({
       lat: PropTypes.number,

@@ -50,7 +50,7 @@ class AddressSearchField extends Component {
 
     return (
       <div className={styles['address-search-field']}>
-        {selectedAddress ? (
+        {selectedAddress.formattedAddress ? (
           <div className={styles['selected-option-container']}>
             <input
               key="selected-address"

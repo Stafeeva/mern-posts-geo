@@ -25,16 +25,31 @@ export function getPosts(req, res) {
  * @returns void
  */
 export function addPost(req, res) {
-  if (!req.body.post.name || !req.body.post.title || !req.body.post.content) {
+  if (!req.body.post.name || !req.body.post.title || !req.body.post.content || !req.body.post.address) {
     res.status(403).end();
   }
 
-  const newPost = new Post(req.body.post);
+  const { name, title, content, address } = req.body.post;
+
+  const newPost = new Post({
+    name,
+    title,
+    content,
+    address: address.formattedAddress,
+    location: {
+      type: 'Point',
+      coordinates: [
+        address.location.lng,
+        address.location.lat,
+      ],
+    },
+  });
 
   // Let's sanitize inputs
   newPost.title = sanitizeHtml(newPost.title);
   newPost.name = sanitizeHtml(newPost.name);
   newPost.content = sanitizeHtml(newPost.content);
+  newPost.address = sanitizeHtml(newPost.address);
 
   newPost.slug = slug(newPost.title.toLowerCase(), { lowercase: true });
   newPost.cuid = cuid();
