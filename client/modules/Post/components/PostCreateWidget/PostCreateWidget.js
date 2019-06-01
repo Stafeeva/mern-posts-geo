@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 
-import AddressSearchField from './AddressSearchField';
+import AddressSearchField from '../AddressSearchField/AddressSearchField';
 
 // Import Style
 import styles from './PostCreateWidget.css';

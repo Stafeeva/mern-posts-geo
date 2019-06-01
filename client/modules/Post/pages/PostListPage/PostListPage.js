@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 // Import Components
 import PostList from '../../components/PostList';
 import PostCreateWidget from '../../components/PostCreateWidget/PostCreateWidget';
+import PostFilter from '../../components/PostFilter/PostFilter';
 
 // Import Actions
 import { addPostRequest, fetchPosts, deletePostRequest } from '../../PostActions';
@@ -27,12 +28,15 @@ class PostListPage extends Component {
   };
 
   handleAddPost = (name, title, content) => {
-    this.props.dispatch(toggleAddPost());
+    const { address, dispatch } = this.props;
 
-    const { address } = this.props;
-
-    this.props.dispatch(addPostRequest({ name, title, content, address }));
+    dispatch(toggleAddPost());
+    dispatch(addPostRequest({ name, title, content, address }));
   };
+
+  filterPosts = filters => {
+    console.log('filters', filters);
+  }
 
   render() {
     return (
@@ -41,6 +45,7 @@ class PostListPage extends Component {
           addPost={this.handleAddPost}
           showAddPost={this.props.showAddPost}
         />
+        <PostFilter findPosts={this.filterPosts} />
         <PostList handleDeletePost={this.handleDeletePost} posts={this.props.posts} />
       </div>
     );
@@ -60,7 +65,6 @@ function mapStateToProps(state) {
 }
 
 PostListPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   address: PropTypes.shape({
     formattedAddress: PropTypes.string,
     location: PropTypes.shape({
@@ -68,10 +72,11 @@ PostListPage.propTypes = {
       lng: PropTypes.number,
     }),
   }),
+  dispatch: PropTypes.func.isRequired,
   posts: PropTypes.arrayOf(PropTypes.shape({
+    content: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
   })).isRequired,
   showAddPost: PropTypes.bool.isRequired,
 };

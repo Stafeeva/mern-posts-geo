@@ -27,5 +27,10 @@ export default {
     	  =1 {has # comment}
     	  other {has # comments}
     	} as of {date}`,
+    findPosts: 'Find Posts',
+    clearFilters: 'Clear Filters',
+    locationFilter: 'Filter by Location',
+    textFilter: 'Filter by text',
+    radius: 'Radius',
   },
 };

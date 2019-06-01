@@ -6,7 +6,7 @@ import { getAddressesRequest, saveSelectedAddress } from '../../AddressActions';
 
 import { getAddresses, getSelectedAddress } from '../../AddressReducer';
 
-import styles from './PostCreateWidget.css';
+import styles from './AddressSearchField.css';
 
 class AddressSearchField extends Component {
   constructor(props) {
@@ -55,8 +55,7 @@ class AddressSearchField extends Component {
             <input
               key="selected-address"
               value={selectedAddress.formattedAddress}
-              className={styles['form-field']}
-              ref="location"
+              className={styles['address-input']}
               readOnly
             />
             <button
@@ -71,7 +70,7 @@ class AddressSearchField extends Component {
             <input
               key="address-input"
               onChange={onTypeAddress}
-              className={styles['form-field']}
+              className={styles['address-input']}
               placeholder="Location"
             />
             {showOptions && addresses && addresses.length > 0 && (

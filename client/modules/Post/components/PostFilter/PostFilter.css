@@ -1,26 +1,13 @@
-.form {
-  display: none;
-  background: #FAFAFA;
-  padding: 32px 0;
-  border: 1px solid #eee;
-  border-radius: 4px;
+.post-filters {
+  display: flex;
+  justify-content: space-between;
 }
 
-.form-content {
-  width: 100%;
-  max-width: 600px;
-  margin: auto;
-  font-size: 14px;
+.post-filter {
+  width: 45%;
 }
 
-.form-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #757575;
-}
-
-.form-field {
+.post-filter-input {
   display: block;
   width: 100%;
   margin-bottom: 16px;
@@ -34,11 +21,7 @@
   color: #212121;
 }
 
-textarea {
-  min-height: 200px;
-}
-
-.post-submit-button {
+.filter-button {
   display: inline-block;
   padding: 8px 16px;
   font-size: 18px;
@@ -46,8 +29,12 @@ textarea {
   background: #03A9F4;
   text-decoration: none;
   border-radius: 4px;
+  margin: 5px 10px 5px 0;
+  outline-style: none;
+  cursor: pointer;
 }
 
-.appear {
-  display: block;
+.filter-title {
+  margin-bottom: 16px;
+  color: #212121;
 }
