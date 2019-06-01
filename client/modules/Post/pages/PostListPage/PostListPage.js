@@ -13,6 +13,7 @@ import { toggleAddPost } from '../../../App/AppActions';
 // Import Selectors
 import { getShowAddPost } from '../../../App/AppReducer';
 import { getPosts } from '../../PostReducer';
+import { getSelectedAddress } from '../../AddressReducer';
 
 class PostListPage extends Component {
   componentDidMount() {
@@ -27,7 +28,10 @@ class PostListPage extends Component {
 
   handleAddPost = (name, title, content) => {
     this.props.dispatch(toggleAddPost());
-    this.props.dispatch(addPostRequest({ name, title, content }));
+
+    const { location } = this.props;
+
+    this.props.dispatch(addPostRequest({ name, title, content, location }));
   };
 
   render() {
@@ -49,13 +53,21 @@ PostListPage.need = [() => { return fetchPosts(); }];
 // Retrieve data from store as props
 function mapStateToProps(state) {
   return {
-    showAddPost: getShowAddPost(state),
+    location: getSelectedAddress(state),
     posts: getPosts(state),
+    showAddPost: getShowAddPost(state),
   };
 }
 
 PostListPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    formattedAddress: PropTypes.string,
+    location: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }),
+  }),
   posts: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

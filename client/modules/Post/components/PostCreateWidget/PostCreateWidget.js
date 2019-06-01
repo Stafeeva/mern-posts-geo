@@ -13,13 +13,9 @@ export class PostCreateWidget extends Component {
     const titleRef = this.refs.title;
     const contentRef = this.refs.content;
 
-    console.log('this.refs', this.refs);
-
-    const locationRef = this.refs.location;
-
-    if (nameRef.value && titleRef.value && contentRef.value && nameRef.location) {
-      this.props.addPost(nameRef.value, titleRef.value, contentRef.value, locationRef.value);
-      nameRef.value = titleRef.value = contentRef.value = locationRef.value = '';
+    if (nameRef.value && titleRef.value && contentRef.value) {
+      this.props.addPost(nameRef.value, titleRef.value, contentRef.value);
+      nameRef.value = titleRef.value = contentRef.value = '';
     }
   };
 

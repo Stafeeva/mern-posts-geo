@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { getAddressesRequest } from '../../AddressActions';
+import { getAddressesRequest, saveSelectedAddress } from '../../AddressActions';
 
-import { getAddresses } from '../../AddressReducer';
+import { getAddresses, getSelectedAddress } from '../../AddressReducer';
 
 import styles from './PostCreateWidget.css';
 
@@ -13,7 +13,6 @@ class AddressSearchField extends Component {
     super(props);
 
     this.state = {
-      selectedAddress: undefined,
       showOptions: false,
     };
   }
@@ -22,36 +21,32 @@ class AddressSearchField extends Component {
     const address = event.target.value;
 
     if (address.length > 2) {
-      this.getAddresses(address);
+      this.props.dispatch(getAddressesRequest(address));
 
       this.state.showOptions = true;
     }
   };
 
-  onSelectAddress = (event) => {
-    const { address } = event.target.dataset;
-
+  onSelectAddress = (address) => {
     this.setState({
-      selectedAddress: address,
       showOptions: false,
     });
+
+    this.props.dispatch(saveSelectedAddress(address));
   }
 
   onClickRemoveLocation = () => {
+    this.saveAddress('');
+
     this.setState({
-      selectedAddress: undefined,
       showOptions: false,
     });
   }
 
-  getAddresses = (address) => {
-    this.props.dispatch(getAddressesRequest(address));
-  };
-
   render() {
     const { onClickRemoveLocation, onSelectAddress, onTypeAddress } = this;
-    const { addresses } = this.props;
-    const { selectedAddress, showOptions } = this.state;
+    const { addresses, selectedAddress } = this.props;
+    const { showOptions } = this.state;
 
     return (
       <div className={styles['address-search-field']}>
@@ -59,7 +54,7 @@ class AddressSearchField extends Component {
           <div className={styles['selected-option-container']}>
             <input
               key="selected-address"
-              value={selectedAddress}
+              value={selectedAddress.formattedAddress}
               className={styles['form-field']}
               ref="location"
               readOnly
@@ -84,9 +79,8 @@ class AddressSearchField extends Component {
                 {addresses.map(address => (
                   <a
                     className={styles['option-field']}
-                    onClick={onSelectAddress}
+                    onClick={() => onSelectAddress(address)}
                     key={address.formattedAddress}
-                    data-address={address.formattedAddress}
                   >
                     {address.formattedAddress}
                   </a>
@@ -103,6 +97,7 @@ class AddressSearchField extends Component {
 function mapStateToProps(state) {
   return {
     addresses: getAddresses(state),
+    selectedAddress: getSelectedAddress(state),
   };
 }
 
@@ -115,6 +110,13 @@ AddressSearchField.propTypes = {
     }),
   })),
   dispatch: PropTypes.func.isRequired,
+  selectedAddress: PropTypes.shape({
+    formattedAddress: PropTypes.string,
+    location: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }),
+  }),
 };
 
 export default connect(mapStateToProps)(AddressSearchField);

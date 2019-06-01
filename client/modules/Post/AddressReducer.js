@@ -1,13 +1,22 @@
-import { ADD_ADDRESSES } from './AddressActions';
+import { ADD_ADDRESSES, SAVE_SELECTED_ADDRESS } from './AddressActions';
 
-// Initial State
-const initialState = { data: [] };
+const initialState = {
+  data: [],
+  selectedAddress: {},
+};
 
 const AddressReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_ADDRESSES :
+    case ADD_ADDRESSES:
       return {
+        ...state,
         data: action.addresses,
+      };
+
+    case SAVE_SELECTED_ADDRESS:
+      return {
+        ...state,
+        selectedAddress: action.address,
       };
 
     default:
@@ -16,5 +25,7 @@ const AddressReducer = (state = initialState, action) => {
 };
 
 export const getAddresses = state => state.addresses.data;
+
+export const getSelectedAddress = state => state.addresses.selectedAddress;
 
 export default AddressReducer;
