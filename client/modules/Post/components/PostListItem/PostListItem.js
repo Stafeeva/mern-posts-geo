@@ -7,21 +7,31 @@ import { FormattedMessage } from 'react-intl';
 import styles from './PostListItem.css';
 import ReactMarkdown from 'react-markdown';
 
-function PostListItem(props) {
+const PostListItem = props => {
+  const {
+    address,
+    content,
+    cuid,
+    name,
+    slug,
+    title,
+  } = props.post;
+
   return (
     <div className={styles['single-post']}>
       <h3 className={styles['post-title']}>
-        <Link to={`/posts/${props.post.slug}-${props.post.cuid}`} >
-          {props.post.title}
+        <Link to={`/posts/${slug}-${cuid}`}>
+          {title}
         </Link>
       </h3>
-      <p className={styles['author-name']}><FormattedMessage id="by" /> {props.post.name}</p>
-      <div className={styles['post-desc']}><ReactMarkdown source={props.post.content} /></div>
+      <p className={styles['author-name']}><FormattedMessage id="by" /> {name}</p>
+      <p className={styles['post-address']}>{address}</p>
+      <div className={styles['post-desc']}><ReactMarkdown source={content} /></div>
       <p className={styles['post-action']}><a href="#" onClick={props.onDelete}><FormattedMessage id="deletePost" /></a></p>
       <hr className={styles.divider} />
     </div>
   );
-}
+};
 
 PostListItem.propTypes = {
   post: PropTypes.shape({
@@ -30,6 +40,7 @@ PostListItem.propTypes = {
     content: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired,
     cuid: PropTypes.string.isRequired,
+    address: PropTypes.string,
   }).isRequired,
   onDelete: PropTypes.func.isRequired,
 };

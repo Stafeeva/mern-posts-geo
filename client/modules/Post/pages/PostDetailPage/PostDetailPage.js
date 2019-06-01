@@ -13,18 +13,21 @@ import { fetchPost } from '../../PostActions';
 // Import Selectors
 import { getPost } from '../../PostReducer';
 
-export function PostDetailPage(props) {
+export const PostDetailPage = props => {
+  const { address, content, name, title } = props.post;
+
   return (
     <div>
-      <Helmet title={props.post.title} />
+      <Helmet title={title} />
       <div className={`${styles['single-post']} ${styles['post-detail']}`}>
-        <h3 className={styles['post-title']}>{props.post.title}</h3>
-        <p className={styles['author-name']}><FormattedMessage id="by" /> {props.post.name}</p>
-        <p className={styles['post-desc']}>{props.post.content}</p>
+        <h3 className={styles['post-title']}>{title}</h3>
+        <p className={styles['author-name']}><FormattedMessage id="by" />{name}</p>
+        <p className={styles['post-address']}>{address}</p>
+        <p className={styles['post-desc']}>{content}</p>
       </div>
     </div>
   );
-}
+};
 
 // Actions required to provide data for this component to render in server side.
 PostDetailPage.need = [params => {
@@ -40,11 +43,12 @@ function mapStateToProps(state, props) {
 
 PostDetailPage.propTypes = {
   post: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    address: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
     cuid: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    slug: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
   }).isRequired,
 };
 
