@@ -1,5 +1,41 @@
 
-# Alaya mern dev challenge 
+# Alaya mern dev challenge
+
+## Notes
+
+For search:
+
+db.posts.dropIndexes()
+
+db.posts.createIndex(
+  {
+    title: "text",
+    content: "text"
+  },
+  {
+    weights: {
+      title: 10,
+      content: 5
+    },
+    name: "TextIndex"
+  }
+)
+
+For sorting by distance (doesn't work with text search):
+
+const METERS_PER_KM = 1000;
+
+find.location = {
+  $nearSphere: {
+    $geometry: {
+      type: 'Point',
+      coordinates: [lng, lat],
+    },
+    $maxDistance: (radius || 1000) * METERS_PER_KM,
+  },
+};
+
+db.posts.createIndex({ location: "2dsphere" })
 
 MERN is a scaffolding tool which makes it easy to build isomorphic apps using Mongo, Express, React and NodeJS. It minimises the setup time and gets you up to speed using proven technologies.
 
@@ -31,7 +67,7 @@ To show us your skills we would like you to build at least one of theses 2 featu
 The purpose is to be able to attach a geolocation by entering an address in the `PostCreatWidget`,
  to persit it in the `post.js` mongoose model and then to display it using the `PostListItem.js`
 
-For the geocoding you can use the api you want (like [nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) for [openstreetmap](https://www.openstreetmap.org/#map=5/46.449/2.210) 
+For the geocoding you can use the api you want (like [nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) for [openstreetmap](https://www.openstreetmap.org/#map=5/46.449/2.210)
 or [google maps](https://developers.google.com/maps/documentation/geocoding/start)).
 
 It would be perfect if we can store at least one gps location and one address in database by post.
@@ -52,7 +88,7 @@ You can use any npm package you want (like [slatejs](https://www.slatejs.org/#/r
 
 We want to be able to make a comment and to like each post.
 
-The user that comments will have to put an author name and a message in the comment form. 
+The user that comments will have to put an author name and a message in the comment form.
 
 These informations will be stored in DB using mongoose.
 

@@ -10,37 +10,34 @@ import sanitizeHtml from 'sanitize-html';
  * @returns void
  */
 export function getPosts(req, res) {
-  const { contains, lat, lng, radius } = req.query;
+  const { contains, lat, lng, radius = 10 } = req.query;
 
-  let find = {};
+  const find = {};
+  let sort;
 
-  if (contains) {
-    find = {
-      $text: { $search: sanitizeHtml(contains) },
-    };
+  if (!req.query) {
+    sort = '-dateAdded';
   }
 
   if (lat && lng) {
-    const METERS_PER_KM = 1000;
-
-    find = {
-      location: {
-        $nearSphere: {
-          $geometry: {
-            type: 'Point',
-            coordinates: [lng, lat],
-          },
-          $maxDistance: (radius || 1000) * METERS_PER_KM,
-        },
+    find.location = {
+      $geoWithin: {
+        $centerSphere: [[lng, lat], radius / 6371],
       },
     };
   }
 
-  // Post.find(find).sort('-dateAdded')
-  Post.find(find).exec((err, posts) => {
+  if (contains) {
+    find.$text = { $search: sanitizeHtml(contains) };
+  } else {
+    sort = '-dateAdded';
+  }
+
+  Post.find(find).sort(sort).exec((err, posts) => {
     if (err) {
       res.status(500).send(err);
     }
+
     res.json({ posts });
   });
 }

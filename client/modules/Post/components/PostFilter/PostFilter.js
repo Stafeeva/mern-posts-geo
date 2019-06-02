@@ -11,17 +11,17 @@ class PostFilter extends Component {
     super(props);
 
     this.state = {
-      location: null,
+      address: null,
       radius: '',
       text: '',
     };
   }
 
   onClickFind = () => {
-    const { location: { location }, radius, text } = this.state;
+    const { address, radius, text } = this.state;
 
     this.props.findPosts({
-      location,
+      location: address && address.location || null,
       radius,
       text,
     });
@@ -36,16 +36,16 @@ class PostFilter extends Component {
   };
 
   selectAddress = address => {
-    this.setState({ location: address });
+    this.setState({ address });
   };
 
   clearAddressField = () => {
-    this.setState({ location: null });
+    this.setState({ address: null });
   };
 
   clearFilters = () => {
     this.setState({
-      location: null,
+      address: null,
       radius: '',
       text: '',
     });
@@ -61,7 +61,7 @@ class PostFilter extends Component {
       selectAddress,
     } = this;
     const { messages } = this.props.intl;
-    const { location, radius, text } = this.state;
+    const { address, radius, text } = this.state;
 
     return (
       <div>
@@ -71,7 +71,7 @@ class PostFilter extends Component {
             <AddressSearchField
               onRemoveAddress={clearAddressField}
               onSelectAddress={selectAddress}
-              selectedAddress={location}
+              selectedAddress={address}
             />
             <p className={styles['filter-title']}>{messages.radius}</p>
             <input
