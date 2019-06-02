@@ -7,46 +7,88 @@ import AddressSearchField from '../AddressSearchField/AddressSearchField';
 // Import Style
 import styles from './PostCreateWidget.css';
 
+const defaultState = {
+  name: '',
+  title: '',
+  content: '',
+  address: null,
+};
+
 export class PostCreateWidget extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      address: {},
-    };
+    this.state = defaultState;
   }
 
-  addPost = () => {
-    const nameRef = this.refs.name;
-    const titleRef = this.refs.title;
-    const contentRef = this.refs.content;
+  onChangeName = (event) => {
+    this.setState({ name: event.target.value });
+  }
 
-    const address = this.state.address;
+  onChangeTitle = (event) => {
+    this.setState({ title: event.target.value });
+  }
 
-    if (nameRef.value && titleRef.value && contentRef.value) {
-      this.props.addPost(nameRef.value, titleRef.value, contentRef.value, address);
-      nameRef.value = titleRef.value = contentRef.value = '';
-    }
-  };
+  onChangeContent = (event) => {
+    this.setState({ content: event.target.value });
+  }
 
   saveAddress = address => {
     this.setState({ address });
   };
 
-  render() {
-    const cls = `${styles.form} ${(this.props.showAddPost ? styles.appear : '')}`;
+  clearAddressField = () => {
+    this.setState({ address: null });
+  };
 
-    const { saveAddress } = this;
+  addPost = () => {
+    const { name, title, content, address } = this.state;
+
+    if (name && title && content && address) {
+      this.props.addPost(name, title, content, address);
+      this.state = defaultState;
+    }
+  };
+
+  render() {
+    const { messages } = this.props.intl;
+    const {
+      addPost,
+      clearAddressField,
+      onChangeContent,
+      onChangeName,
+      onChangeTitle,
+      saveAddress,
+    } = this;
+    const { name, title, content, address } = this.state;
 
     return (
-      <div className={cls}>
+      <div className={styles.form}>
         <div className={styles['form-content']}>
           <h2 className={styles['form-title']}><FormattedMessage id="createNewPost" /></h2>
-          <input placeholder={this.props.intl.messages.authorName} className={styles['form-field']} ref="name" />
-          <input placeholder={this.props.intl.messages.postTitle} className={styles['form-field']} ref="title" />
-          <textarea placeholder={this.props.intl.messages.postContent} className={styles['form-field']} ref="content" />
-          <AddressSearchField onSelectAddress={saveAddress} />
-          <a className={styles['post-submit-button']} href="#" onClick={this.addPost}><FormattedMessage id="submit" /></a>
+          <input
+            value={name}
+            onChange={onChangeName}
+            placeholder={messages.authorName}
+            className={styles['form-field']}
+          />
+          <input
+            value={title}
+            onChange={onChangeTitle}
+            placeholder={messages.postTitle}
+            className={styles['form-field']}
+          />
+          <textarea
+            value={content}
+            onChange={onChangeContent}
+            placeholder={messages.postContent}
+            className={styles['form-field']}
+          />
+          <AddressSearchField
+            onRemoveAddress={clearAddressField}
+            onSelectAddress={saveAddress}
+            selectedAddress={address}
+          />
+          <a className={styles['post-submit-button']} href="#" onClick={addPost}><FormattedMessage id="submit" /></a>
         </div>
       </div>
     );
@@ -56,7 +98,6 @@ export class PostCreateWidget extends Component {
 PostCreateWidget.propTypes = {
   addPost: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
-  showAddPost: PropTypes.bool.isRequired,
 };
 
 export default injectIntl(PostCreateWidget);

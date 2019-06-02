@@ -14,7 +14,6 @@ import { toggleAddPost } from '../../../App/AppActions';
 // Import Selectors
 import { getShowAddPost } from '../../../App/AppReducer';
 import { getPosts } from '../../PostReducer';
-import { getSelectedAddress } from '../../AddressReducer';
 
 class PostListPage extends Component {
   componentDidMount() {
@@ -29,9 +28,8 @@ class PostListPage extends Component {
 
   handleAddPost = (name, title, content, address) => {
     const { dispatch } = this.props;
-
-    dispatch(toggleAddPost());
     dispatch(addPostRequest({ name, title, content, address }));
+    dispatch(toggleAddPost());
   };
 
   filterPosts = filters => {
@@ -39,14 +37,15 @@ class PostListPage extends Component {
   }
 
   render() {
+    const { posts, showAddPost } = this.props;
+
     return (
       <div>
-        <PostCreateWidget
-          addPost={this.handleAddPost}
-          showAddPost={this.props.showAddPost}
-        />
+        {showAddPost && (
+          <PostCreateWidget addPost={this.handleAddPost} />
+        )}
         <PostFilter findPosts={this.filterPosts} />
-        <PostList handleDeletePost={this.handleDeletePost} posts={this.props.posts} />
+        <PostList handleDeletePost={this.handleDeletePost} posts={posts} />
       </div>
     );
   }
@@ -58,20 +57,12 @@ PostListPage.need = [() => { return fetchPosts(); }];
 // Retrieve data from store as props
 function mapStateToProps(state) {
   return {
-    address: getSelectedAddress(state),
     posts: getPosts(state),
     showAddPost: getShowAddPost(state),
   };
 }
 
 PostListPage.propTypes = {
-  address: PropTypes.shape({
-    formattedAddress: PropTypes.string,
-    location: PropTypes.shape({
-      lat: PropTypes.number,
-      lng: PropTypes.number,
-    }),
-  }),
   dispatch: PropTypes.func.isRequired,
   posts: PropTypes.arrayOf(PropTypes.shape({
     content: PropTypes.string.isRequired,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
 import callApi from '../../../../util/apiCaller';
 
 import styles from './AddressSearchField.css';
@@ -10,7 +11,6 @@ class AddressSearchField extends Component {
 
     this.state = {
       addresses: [],
-      selectedAddress: '',
       showOptions: false,
     };
   }
@@ -31,7 +31,6 @@ class AddressSearchField extends Component {
 
   onSelectAddress = (address) => {
     this.setState({
-      selectedAddress: address.formattedAddress,
       showOptions: false,
     });
 
@@ -39,17 +38,19 @@ class AddressSearchField extends Component {
   }
 
   onClickRemoveLocation = () => {
-    // update
     this.setState({
       address: [],
-      selectedAddress: '',
       showOptions: false,
     });
+
+    this.props.onRemoveAddress();
   }
 
   render() {
     const { onClickRemoveLocation, onSelectAddress, onTypeAddress } = this;
-    const { addresses, selectedAddress, showOptions } = this.state;
+    const { addresses, showOptions } = this.state;
+    const { selectedAddress } = this.props;
+    const { messages } = this.props.intl;
 
     return (
       <div className={styles['address-search-field']}>
@@ -57,7 +58,7 @@ class AddressSearchField extends Component {
           <div className={styles['selected-option-container']}>
             <input
               key="selected-address"
-              value={selectedAddress}
+              value={selectedAddress.formattedAddress}
               className={styles['address-input']}
               readOnly
             />
@@ -65,7 +66,7 @@ class AddressSearchField extends Component {
               onClick={onClickRemoveLocation}
               className={styles['remove-button']}
             >
-              Remove
+              {messages.remove}
             </button>
           </div>
         ) : (
@@ -97,7 +98,16 @@ class AddressSearchField extends Component {
 }
 
 AddressSearchField.propTypes = {
+  intl: intlShape.isRequired,
+  onRemoveAddress: PropTypes.func.isRequired,
   onSelectAddress: PropTypes.func.isRequired,
+  selectedAddress: PropTypes.shape({
+    formattedAddress: PropTypes.string,
+    location: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }),
+  }),
 };
 
-export default AddressSearchField;
+export default injectIntl(AddressSearchField);

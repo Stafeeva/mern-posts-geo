@@ -32,5 +32,6 @@ export default {
     locationFilter: 'Filter by Location',
     textFilter: 'Filter by text',
     radius: 'Radius',
+    remove: 'Remove',
   },
 };
