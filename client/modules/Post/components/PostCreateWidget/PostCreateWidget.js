@@ -8,19 +8,35 @@ import AddressSearchField from '../AddressSearchField/AddressSearchField';
 import styles from './PostCreateWidget.css';
 
 export class PostCreateWidget extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      address: {},
+    };
+  }
+
   addPost = () => {
     const nameRef = this.refs.name;
     const titleRef = this.refs.title;
     const contentRef = this.refs.content;
 
+    const address = this.state.address;
+
     if (nameRef.value && titleRef.value && contentRef.value) {
-      this.props.addPost(nameRef.value, titleRef.value, contentRef.value);
+      this.props.addPost(nameRef.value, titleRef.value, contentRef.value, address);
       nameRef.value = titleRef.value = contentRef.value = '';
     }
   };
 
+  saveAddress = address => {
+    this.setState({ address });
+  };
+
   render() {
     const cls = `${styles.form} ${(this.props.showAddPost ? styles.appear : '')}`;
+
+    const { saveAddress } = this;
 
     return (
       <div className={cls}>
@@ -29,7 +45,7 @@ export class PostCreateWidget extends Component {
           <input placeholder={this.props.intl.messages.authorName} className={styles['form-field']} ref="name" />
           <input placeholder={this.props.intl.messages.postTitle} className={styles['form-field']} ref="title" />
           <textarea placeholder={this.props.intl.messages.postContent} className={styles['form-field']} ref="content" />
-          <AddressSearchField />
+          <AddressSearchField onSelectAddress={saveAddress} />
           <a className={styles['post-submit-button']} href="#" onClick={this.addPost}><FormattedMessage id="submit" /></a>
         </div>
       </div>

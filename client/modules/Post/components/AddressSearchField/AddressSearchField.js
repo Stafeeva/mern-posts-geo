@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-
-import { getAddressesRequest, saveSelectedAddress } from '../../AddressActions';
-
-import { getAddresses, getSelectedAddress } from '../../AddressReducer';
+import callApi from '../../../../util/apiCaller';
 
 import styles from './AddressSearchField.css';
 
@@ -13,6 +9,8 @@ class AddressSearchField extends Component {
     super(props);
 
     this.state = {
+      addresses: [],
+      selectedAddress: '',
       showOptions: false,
     };
   }
@@ -21,40 +19,45 @@ class AddressSearchField extends Component {
     const address = event.target.value;
 
     if (address.length > 2) {
-      this.props.dispatch(getAddressesRequest(address));
-
-      this.state.showOptions = true;
+      // what if this api call fails?
+      callApi(`addresses?address=${address}`).then(addresses => {
+        this.setState({
+          addresses,
+          showOptions: addresses && addresses.length > 0,
+        });
+      });
     }
   };
 
   onSelectAddress = (address) => {
     this.setState({
+      selectedAddress: address.formattedAddress,
       showOptions: false,
     });
 
-    this.props.dispatch(saveSelectedAddress(address));
+    this.props.onSelectAddress(address);
   }
 
   onClickRemoveLocation = () => {
-    this.saveAddress('');
-
+    // update
     this.setState({
+      address: [],
+      selectedAddress: '',
       showOptions: false,
     });
   }
 
   render() {
     const { onClickRemoveLocation, onSelectAddress, onTypeAddress } = this;
-    const { addresses, selectedAddress } = this.props;
-    const { showOptions } = this.state;
+    const { addresses, selectedAddress, showOptions } = this.state;
 
     return (
       <div className={styles['address-search-field']}>
-        {selectedAddress.formattedAddress ? (
+        {selectedAddress ? (
           <div className={styles['selected-option-container']}>
             <input
               key="selected-address"
-              value={selectedAddress.formattedAddress}
+              value={selectedAddress}
               className={styles['address-input']}
               readOnly
             />
@@ -73,7 +76,7 @@ class AddressSearchField extends Component {
               className={styles['address-input']}
               placeholder="Location"
             />
-            {showOptions && addresses && addresses.length > 0 && (
+            {showOptions && (
               <div className={styles['options-list']}>
                 {addresses.map(address => (
                   <a
@@ -93,29 +96,8 @@ class AddressSearchField extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    addresses: getAddresses(state),
-    selectedAddress: getSelectedAddress(state),
-  };
-}
-
 AddressSearchField.propTypes = {
-  addresses: PropTypes.arrayOf(PropTypes.shape({
-    address: PropTypes.string,
-    location: PropTypes.shape({
-      lat: PropTypes.number,
-      lng: PropTypes.number,
-    }),
-  })),
-  dispatch: PropTypes.func.isRequired,
-  selectedAddress: PropTypes.shape({
-    formattedAddress: PropTypes.string,
-    location: PropTypes.shape({
-      lat: PropTypes.number,
-      lng: PropTypes.number,
-    }),
-  }),
+  onSelectAddress: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps)(AddressSearchField);
+export default AddressSearchField;
