@@ -10,7 +10,34 @@ import sanitizeHtml from 'sanitize-html';
  * @returns void
  */
 export function getPosts(req, res) {
-  Post.find().sort('-dateAdded').exec((err, posts) => {
+  const { contains, lat, lng, radius } = req.query;
+
+  let find = {};
+
+  if (contains) {
+    find = {
+      $text: { $search: sanitizeHtml(contains) },
+    };
+  }
+
+  if (lat && lng) {
+    const METERS_PER_KM = 1000;
+
+    find = {
+      location: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [lng, lat],
+          },
+          $maxDistance: (radius || 1000) * METERS_PER_KM,
+        },
+      },
+    };
+  }
+
+  // Post.find(find).sort('-dateAdded')
+  Post.find(find).exec((err, posts) => {
     if (err) {
       res.status(500).send(err);
     }

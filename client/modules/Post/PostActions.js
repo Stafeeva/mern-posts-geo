@@ -33,9 +33,25 @@ export function addPosts(posts) {
   };
 }
 
-export function fetchPosts() {
+export function fetchPosts(filters = {}) {
   return (dispatch) => {
-    return callApi('posts').then(res => {
+    const { location, radius, text } = filters;
+
+    let url = 'posts?';
+
+    if (text) {
+      url += `contains=${text}`;
+    }
+
+    if (location) {
+      url += `&lng=${location.lng}&lat=${location.lat}`;
+
+      if (radius) {
+        url += `&radius=${radius}`;
+      }
+    }
+
+    return callApi(url).then(res => {
       dispatch(addPosts(res.posts));
     });
   };

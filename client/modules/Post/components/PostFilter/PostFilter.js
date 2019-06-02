@@ -18,9 +18,13 @@ class PostFilter extends Component {
   }
 
   onClickFind = () => {
-    console.log('state', this.state);
+    const { location: { location }, radius, text } = this.state;
 
-    this.props.findPosts(this.state);
+    this.props.findPosts({
+      location,
+      radius,
+      text,
+    });
   };
 
   onTypeTextFilter = event => {

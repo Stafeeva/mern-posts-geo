@@ -33,7 +33,7 @@ class PostListPage extends Component {
   };
 
   filterPosts = filters => {
-    console.log('filters', filters);
+    this.props.dispatch(fetchPosts(filters));
   }
 
   render() {

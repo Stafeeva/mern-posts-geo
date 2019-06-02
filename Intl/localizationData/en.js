@@ -31,7 +31,7 @@ export default {
     clearFilters: 'Clear Filters',
     locationFilter: 'Filter by Location',
     textFilter: 'Filter by text',
-    radius: 'Radius',
+    radius: 'Radius (km)',
     remove: 'Remove',
   },
 };
