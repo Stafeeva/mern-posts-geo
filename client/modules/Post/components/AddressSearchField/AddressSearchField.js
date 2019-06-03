@@ -11,6 +11,8 @@ class AddressSearchField extends Component {
 
     this.state = {
       addresses: [],
+      isError: false,
+      isLoading: false,
       showOptions: false,
     };
   }
@@ -18,12 +20,23 @@ class AddressSearchField extends Component {
   onTypeAddress = (event) => {
     const address = event.target.value;
 
-    if (address.length > 2) {
-      // what if this api call fails?
+    this.setState({
+      isError: false,
+      showOptions: false,
+    });
+
+    if (address.length > 2 && !this.state.isLoading) {
+      this.setState({ isLoading: true });
       callApi(`addresses?address=${address}`).then(addresses => {
         this.setState({
           addresses,
+          isLoading: false,
           showOptions: addresses && addresses.length > 0,
+        });
+      }).catch(() => {
+        this.setState({
+          isLoading: false,
+          isError: true,
         });
       });
     }
@@ -48,7 +61,7 @@ class AddressSearchField extends Component {
 
   render() {
     const { onClickRemoveLocation, onSelectAddress, onTypeAddress } = this;
-    const { addresses, showOptions } = this.state;
+    const { addresses, isError, isLoading, showOptions } = this.state;
     const { selectedAddress } = this.props;
     const { messages } = this.props.intl;
 
@@ -70,13 +83,21 @@ class AddressSearchField extends Component {
             </button>
           </div>
         ) : (
-          <div>
+          <div className={styles['address-search-container']}>
             <input
               key="address-input"
               onChange={onTypeAddress}
               className={styles['address-input']}
-              placeholder="Location"
+              placeholder={messages.location}
             />
+            {isLoading && (
+              <span className={styles['loading-message']}>
+                {messages.loading}
+              </span>
+            )}
+            {isError && (
+              <p className={styles['error-message']}>{messages.error}</p>
+            )}
             {showOptions && (
               <div className={styles['options-list']}>
                 {addresses.map(address => (

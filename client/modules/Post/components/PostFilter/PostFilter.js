@@ -44,6 +44,8 @@ class PostFilter extends Component {
   };
 
   clearFilters = () => {
+    this.props.findPosts();
+
     this.setState({
       address: null,
       radius: '',
@@ -64,8 +66,8 @@ class PostFilter extends Component {
     const { address, radius, text } = this.state;
 
     return (
-      <div>
-        <div className={styles['post-filters']}>
+      <div className={styles['post-filters']}>
+        <div className={styles['post-filters-container']}>
           <div className={styles['post-filter']}>
             <p className={styles['filter-title']}>{messages.locationFilter}</p>
             <AddressSearchField

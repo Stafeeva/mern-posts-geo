@@ -33,5 +33,8 @@ export default {
     textFilter: 'Filter by text',
     radius: 'Radius (km)',
     remove: 'Remove',
+    loading: 'Loading...',
+    error: 'An error occurred. Please try again.',
+    noPosts: 'No posts found',
   },
 };

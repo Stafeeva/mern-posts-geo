@@ -1,4 +1,9 @@
 .post-filters {
+  margin: 32px 0;
+  padding: 15px;
+}
+
+.post-filters-container {
   display: flex;
   justify-content: space-between;
 }

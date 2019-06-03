@@ -35,7 +35,7 @@
   background-color: #FFFFFF;
 }
 
-.selected-option-container {
+.selected-option-container, .address-search-container {
   position: relative;
 }
 
@@ -46,4 +46,17 @@
   border: none;
   opacity: 0.6;
   cursor: pointer;
+}
+
+.loading-message {
+  position: absolute;
+  top: 15px;
+  font-size: 11px;
+  right: 10px;
+  opacity: 0.6;
+}
+
+.error-message {
+  font-size: 11px;
+  margin: 0 0 16px 0;
 }
