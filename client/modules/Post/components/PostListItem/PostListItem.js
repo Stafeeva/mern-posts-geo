@@ -34,15 +34,15 @@ const PostListItem = props => {
 };
 
 PostListItem.propTypes = {
-  post: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
-    cuid: PropTypes.string.isRequired,
-    address: PropTypes.string,
-  }).isRequired,
   onDelete: PropTypes.func.isRequired,
+  post: PropTypes.shape({
+    address: PropTypes.string,
+    content: PropTypes.string.isRequired,
+    cuid: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    slug: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default PostListItem;

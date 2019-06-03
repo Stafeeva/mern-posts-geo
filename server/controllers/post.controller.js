@@ -15,10 +15,6 @@ export function getPosts(req, res) {
   const find = {};
   let sort;
 
-  if (!req.query) {
-    sort = '-dateAdded';
-  }
-
   if (lat && lng) {
     find.location = {
       $geoWithin: {

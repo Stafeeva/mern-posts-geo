@@ -4,7 +4,15 @@ import sinon from 'sinon';
 import PostListItem from '../../components/PostListItem/PostListItem';
 import { mountWithIntl, shallowWithIntl } from '../../../../util/react-intl-test-helper';
 
-const post = { name: 'Prashant', title: 'Hello Mern', slug: 'hello-mern', cuid: 'f34gb2bh24b24b2', content: "All cats meow 'mern!'" };
+const post = {
+  name: 'Prashant',
+  title: 'Hello Mern',
+  slug: 'hello-mern',
+  cuid: 'f34gb2bh24b24b2',
+  content: "All cats meow 'mern!'",
+  address: 'Lausanne',
+};
+
 const props = {
   post,
   onDelete: () => {},
@@ -18,7 +26,7 @@ test('renders properly', t => {
   t.truthy(wrapper.hasClass('single-post'));
   t.is(wrapper.find('Link').first().prop('children'), post.title);
   t.regex(wrapper.find('.author-name').first().text(), new RegExp(post.name));
-  t.is(wrapper.find('.post-desc').first().text(), post.content);
+  t.is(wrapper.find('.post-address').first().text(), post.address);
 });
 
 test('has correct props', t => {
