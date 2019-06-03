@@ -27,5 +27,17 @@ export default {
   		  =1 {has # comment}
   		  other {has # comments}
   		} as of {date} (in real app this would be translated to French)`,
+    findPosts: 'Trouver des articles',
+    clearFilters: 'Supprimer les filtres',
+    locationFilter: 'Filtrer par localisation',
+    textFilter: 'Filtrer par texte',
+    radius: 'Radius (km)',
+    remove: 'Supprimer',
+    loading: 'Chargement...',
+    error: 'Une erreur est survenue, veuillez recommencer.',
+    noPosts: 'Aucun article trouvé',
+    locationPlaceholder: 'Localisation',
+    radiusPlaceholder: 'Radius',
+    textPlaceholder: 'Texte',
   },
 };

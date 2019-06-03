@@ -88,7 +88,7 @@ class AddressSearchField extends Component {
               key="address-input"
               onChange={onTypeAddress}
               className={styles['address-input']}
-              placeholder={messages.location}
+              placeholder={messages.locationPlaceholder}
             />
             {isLoading && (
               <span className={styles['loading-message']}>

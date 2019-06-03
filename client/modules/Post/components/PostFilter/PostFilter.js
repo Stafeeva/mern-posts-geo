@@ -80,6 +80,7 @@ class PostFilter extends Component {
               value={radius}
               className={styles['post-filter-input']}
               onChange={onTypeRadius}
+              placeholder={messages.radiusPlaceholder}
             />
           </div>
           <div className={styles['post-filter']}>
@@ -88,6 +89,7 @@ class PostFilter extends Component {
               value={text}
               className={styles['post-filter-input']}
               onChange={onTypeTextFilter}
+              placeholder={messages.textPlaceholder}
             />
           </div>
         </div>

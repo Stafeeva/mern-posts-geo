@@ -36,5 +36,8 @@ export default {
     loading: 'Loading...',
     error: 'An error occurred. Please try again.',
     noPosts: 'No posts found',
+    locationPlaceholder: 'Location',
+    radiusPlaceholder: 'Radius',
+    textPlaceholder: 'Text',
   },
 };
