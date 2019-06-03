@@ -1,7 +1,7 @@
-const GOOGLE_API_KEY = process.env.ALAYA_GOOGLE_API_KEY;
+import Config from '../config';
 
 const googleMapsClient = require('@google/maps').createClient({
-  key: GOOGLE_API_KEY,
+  key: Config.google_api_key,
 });
 
 export function getAddresses(req, res) {

@@ -1,11 +1,19 @@
+# Notes on Solution
 
-# Alaya mern dev challenge
+To implement the feature I used the Node.js Client for Google Maps Services:
 
-## Notes
+https://github.com/googlemaps/google-maps-services-js
 
-For search:
+To run the app, you should have a valid google API key. Save it to you bash profile or .zshrc as:
 
-db.posts.dropIndexes()
+ALAYA_GOOGLE_API_KEY=your_api_key
+
+Important! In order for Filters to work, please create an index in MongoDB:
+
+```
+mongo
+
+use mern-starter
 
 db.posts.createIndex(
   {
@@ -20,9 +28,41 @@ db.posts.createIndex(
     name: "TextIndex"
   }
 )
+```
 
-For sorting by distance (doesn't work with text search):
+### Changes
 
+#### DB
+  - Added an index for text search
+
+#### Server
+  - Added GET `/addresses` endpoint
+
+  - Amended GET `/posts` endpoint to accept query parameters (contains, lat, lng, radius), and to let Mongo sort the results when a text filter is passed - otherwise sort by date added
+
+  - Amended POST `/posts` to accept an address and a location point (lat and lng)
+
+#### Client
+
+  - Changed Create post form to use local state instead of reading the ref (more idiomatic in React)
+
+  - New component AddressSearchField (used by create Post form and filters), sends an API call to the Node app, which queries Google Maps API to find an address. Initially used Redux to store the selected address, and the list of addresses that came back, but I then refactored to use local state instead as it makes the component easier to reuse
+
+  - Refactored showAddPost (do this in the parent component instead rather than hiding with CSS, this ensures React only renders the component when necessary)
+
+  - Changed fetchPosts() to accept filters and to pass them to the API when required
+
+  - Added PostFilter component allowing the user to filter based on text, and location + radius
+
+### Special Note
+
+Text search doesn't work with nearSphere in a single query (more info here: https://docs.mongodb.com/manual/reference/operator/query/nearSphere/).
+
+I use `$geoWithin` instead, which works with a text search. In this case we don't use Index for geolocation, and it returns data unsorted. Posts relevance (weights) is calculated based on text search, and posts are sorted by relevance.
+
+Here is a working solution if you want to use `$nearSphere` without a text search, it returns data sorted by distance:
+
+```
 const METERS_PER_KM = 1000;
 
 find.location = {
@@ -34,8 +74,14 @@ find.location = {
     $maxDistance: (radius || 1000) * METERS_PER_KM,
   },
 };
+```
+`$nearSphere` requires an index, to create one run:
 
+```
 db.posts.createIndex({ location: "2dsphere" })
+```
+
+# Alaya mern dev challenge
 
 MERN is a scaffolding tool which makes it easy to build isomorphic apps using Mongo, Express, React and NodeJS. It minimises the setup time and gets you up to speed using proven technologies.
 

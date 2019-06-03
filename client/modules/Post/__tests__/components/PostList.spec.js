@@ -27,7 +27,5 @@ test('renders the list', t => {
     <PostList posts={posts} handleDeletePost={() => {}} />
   );
 
-  console.log('wrapper', wrapper);
-
   t.is(wrapper.find('PostListItem').length, 2);
 });

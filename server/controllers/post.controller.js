@@ -3,6 +3,8 @@ import cuid from 'cuid';
 import slug from 'limax';
 import sanitizeHtml from 'sanitize-html';
 
+const EARTH_RADIUS = 6371;
+
 /**
  * Get all posts
  * @param req
@@ -18,7 +20,7 @@ export function getPosts(req, res) {
   if (lat && lng) {
     find.location = {
       $geoWithin: {
-        $centerSphere: [[lng, lat], radius / 6371],
+        $centerSphere: [[lng, lat], radius / EARTH_RADIUS],
       },
     };
   }

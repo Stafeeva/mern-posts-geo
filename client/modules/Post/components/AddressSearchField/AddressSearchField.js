@@ -27,6 +27,7 @@ class AddressSearchField extends Component {
 
     if (address.length > 2 && !this.state.isLoading) {
       this.setState({ isLoading: true });
+
       callApi(`addresses?address=${address}`).then(addresses => {
         this.setState({
           addresses,
@@ -52,7 +53,7 @@ class AddressSearchField extends Component {
 
   onClickRemoveLocation = () => {
     this.setState({
-      address: [],
+      addresses: [],
       showOptions: false,
     });
 
