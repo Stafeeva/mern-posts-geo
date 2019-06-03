@@ -56,7 +56,7 @@ db.posts.createIndex(
 
 ### Special Note
 
-Text search doesn't work with nearSphere in a single query (more info here: https://docs.mongodb.com/manual/reference/operator/query/nearSphere/).
+Text search doesn't work with `$nearSphere` in a single query (more info here: https://docs.mongodb.com/manual/reference/operator/query/nearSphere/).
 
 I use `$geoWithin` instead, which works with a text search. In this case we don't use Index for geolocation, and it returns data unsorted. Posts relevance (weights) is calculated based on text search, and posts are sorted by relevance.
 
