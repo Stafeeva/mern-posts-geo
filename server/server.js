@@ -61,6 +61,7 @@ if (process.env.NODE_ENV !== 'test') {
     }
 
     // feed some dummy data in DB.
+    console.log('creating dummy data....');
     dummyData();
   });
 }
